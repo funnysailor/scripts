@@ -13,12 +13,14 @@ fi
 #blkid | awk '{print $1}' |  sed -e 's/[0-9]//g' -e 's/\:/\[0-9\]/g'| sort | uniq > exlude_list
 #ls -1 /dev/sd* | grep -v -f exlude_list > disks
 
-for i in `ls -1 /dev/sd*`;
+for i in `ls -1 /dev/sd* | grep -v [0-9]`;
 do
-	file -s $i | grep partition
-	if [ $? -eq 0 ]
+	file -s $i | grep partition > /dev/null
+	if [ $? -ne 0 ]
 	 then echo "$i - without FS,adding to list"
 	 echo $i >> disks
+	else
+	 echo "$i - with FS, skip it"
 	fi
 done
 
