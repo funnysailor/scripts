@@ -13,7 +13,7 @@ fi
 #blkid | awk '{print $1}' |  sed -e 's/[0-9]//g' -e 's/\:/\[0-9\]/g'| sort | uniq > exlude_list
 #ls -1 /dev/sd* | grep -v -f exlude_list > disks
 
-for i in `cat disks_fix`;do echo $i; parted $i  -s mktable msdos;done
+#for i in `cat disks_fix`;do echo $i; parted $i  -s mktable msdos;done
 
 for i in `ls -1 /dev/sd* | grep -v [0-9]`;
 do
