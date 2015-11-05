@@ -1,5 +1,11 @@
 #!/bin/sh
 
+#sendEmail installation:
+#wget http://caspian.dotconf.net/menu/Software/SendEmail/sendEmail-v1.56.tar.gz
+#tar -zxvf sendEmail-v1.56.tar.gz
+#sudo cp -a sendEmail-v1.XX/sendEmail /usr/local/bin
+#sudo chmod +x /usr/local/bin/sendEmail
+
 export MAILTO="$1"
 export SUBJECT="$2"
 export TEXT="$3"
