@@ -60,7 +60,7 @@ for i in `cat disks`;do
  echo "preparing disk $i"
  parted -a optimal $i -s mklabel gpt mkpart primary 0% 100%
  mkfs.ext4 -m0 -E lazy_itable_init ${i}1 > /dev/null
- blkid | grep "$i" | awk '{print $2}' >> disks_with_uuid
+ blkid | grep "$(i)1" | awk '{print $2}' >> disks_with_uuid
  echo "preparing disk $i finished."
 done
 total_drives=$((start_point+total_drives-1))
