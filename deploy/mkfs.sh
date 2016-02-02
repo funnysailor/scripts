@@ -84,9 +84,19 @@ mount -a
 echo "mounting... done"
 df -h | grep data
 
-echo "Backup STS config"
-cp /etc/ass/config-sts.xml /tmp/
+if [ -f /etc/ass/config-sts.xml ]
+then
+  echo "Backup STS config"
+  cp /etc/ass/config-sts.xml /tmp/
+  echo "add to STS config"
+  for disk in `seq $start_point $total_drives`
+    do echo "adding $disk"
+      sed -i "s/<\/Disks>/  <Item>\n        <MountPoint>\/data$disk\/<\/MountPoint>\n        <State>On<\/State>\n      <\/Item>\n      <\/Disks>/" /etc/ass/config-sts.xml 
+    done
+else
+  echo "No STS config found. Exiting"
+  exit 1
+fi
 
-echo "add to STS config"
-for disk in `seq $start_point $total_drives`;do echo $disk;sed -i "s/<\/Disks>/  <Item>\n        <MountPoint>\/data$disk\/<\/MountPoint>\n        <State>On<\/State>\n      <\/Item>\n      <\/Disks>/" /etc/ass/config-sts.xml ;done
+
 echo "Run kill -1 [sts-pid] to reload config"
