@@ -74,6 +74,8 @@ done
 echo "Making dirs... finished"
 
 cd $path
+echo "Backup fstab"
+cp /etc/fstab /tmp/
 echo "prepare fstab..."
 cat disks_with_uuid | (i=$start_point; while read uuid; do printf "$uuid /data%02u                 ext4    defaults,user_xattr        0 0\n" $i; i=$(($i+1)); done) >> /etc/fstab
 echo "prepare fstab... finished"
@@ -81,3 +83,10 @@ echo "mounting..."
 mount -a
 echo "mounting... done"
 df -h | grep data
+
+echo "Backup STS config"
+cp /etc/ass/config-sts.xml /tmp/
+
+echo "add to STS config"
+for disk in `seq $start_point $total_drives`;do echo $disk;sed -i "s/<\/Disks>/  <Item>\n        <MountPoint>\/data$disk\/<\/MountPoint>\n        <State>On<\/State>\n      <\/Item>\n      <\/Disks>/" /etc/ass/config-sts.xml ;done
+echo "Run kill -1 [sts-pid] to reload config"
