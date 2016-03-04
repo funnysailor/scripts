@@ -58,8 +58,11 @@ start_point=$((start_point+1))
 
 for i in `cat disks`;do
  echo "preparing disk $i"
- parted -a optimal $i -s mklabel gpt mkpart primary 0% 100%
+ parted -a optimal -s -- "$i" mklabel gpt mkpart primary 0% 100%
+ echo "Sleep and making $i FS"
+ sleep 0.5
  mkfs.ext4 -m0 -E lazy_itable_init ${i}1 > /dev/null
+ echo "Getting $i uuid"
  blkid | grep "${i}1" | awk '{print $2}' >> disks_with_uuid
  echo "preparing disk $i finished."
 done
